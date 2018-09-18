@@ -1,0 +1,7 @@
+services:    
+    cupidon.extension.sequelize:
+        module: !plugin_dir /Cupidon/CupidonSequelize
+        public: true
+        args: [ !parameter sequelize.cupidon.config, !service container, !project_dir "" ]
+        tags:   
+            - { tag: cupidon.extension, name: sequelize, priority: 10 }

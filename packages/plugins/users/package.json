@@ -1,0 +1,50 @@
+{
+    "name": "@lovejs/users",
+    "author": "Vincent <vincent@fullstack.pro>",
+    "version": "0.0.1",
+    "description": "Lovejs users",
+    "license": "MIT",
+    "homepage": "http://lovejs.io/",
+    "main": "src/index.js",
+    "keywords": [
+        "lovejs",
+        "users",
+        "lovejs plugin"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lovejs/lovejs-users.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lovejs/lovejs-users/issues"
+    },
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "yarn compile && yarn copyfiles",
+        "compile": "tsc",
+        "watch": "tsc --watch",
+        "copyfiles": "node ../../scripts/copy-files.js",
+        "test": "jest",
+        "testing": "jest --watch"
+    },
+    "dependencies": {
+        "bcrypt": "^3.0.0",
+        "bluebird": "^3.5.1",
+        "crypto": "^1.0.1",
+        "fb": "^2.0.0",
+        "fbgraph": "^1.4.4",
+        "google-id-token-verifier": "^0.2.3",
+        "jsonwebtoken": "^8.3.0",
+        "lodash": "^4.17.10",
+        "moment": "^2.22.2",
+        "ms": "^2.1.1",
+        "password-generator": "^2.2.0",
+        "querystring": "^0.2.0",
+        "url": "^0.11.0"
+    },
+    "peerDependencies": {
+        "@lovejs/components": "^0.0.1",
+        "@lovejs/framework": "^0.0.1",
+        "@lovejs/sequelize": "^0.0.1"
+    }
+}

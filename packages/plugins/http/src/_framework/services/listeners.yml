@@ -1,0 +1,12 @@
+services:
+    listener.route:
+        module: !plugin_dir /Listeners/RouteListener
+        public: true
+        arguments: [!service router]
+        tags: { tag: love.listener, event: kernel.request, priority: 10, name: "route" }
+
+    listener.middlewares:
+        module: !plugin_dir /Listeners/MiddlewaresListener
+        public: true
+        arguments: [!service middlewares.resolver]
+        tags: { tag: love.listener, event: kernel.request, priority: 15, name: "middlewares" }

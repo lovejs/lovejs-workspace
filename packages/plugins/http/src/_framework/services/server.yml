@@ -1,0 +1,4 @@
+services:
+    http.server.factory:
+        module: !plugin_dir Http/ServerFactory
+        public: true

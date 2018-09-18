@@ -1,0 +1,20 @@
+services:
+    http.context.class:
+        module: "@lovejs/components::HttpContext"
+        creation: module
+
+    http.context.builder:
+        public: true
+        module: "@lovejs/components::ContextBuilder"
+        arguments:
+            - !service http.context.class
+            - !services { tag: http.context.extension }
+
+    # List of context extensions
+    http.context.extension.path_parameter:
+        module: !plugin_dir /Context/PathParameterExtension
+        tags: { tag: http.context.extension }
+
+    http.context.extension.route:
+        module: !plugin_dir /Context/RouteExtension
+        tags: { tag: http.context.extension }

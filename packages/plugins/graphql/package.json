@@ -1,0 +1,45 @@
+{
+    "name": "@lovejs/graphql",
+    "author": "Vincent <vincent@fullstack.pro>",
+    "version": "0.0.1",
+    "description": "Lovejs graphql",
+    "license": "MIT",
+    "homepage": "http://lovejs.io/",
+    "main": "src/index.js",
+    "keywords": [
+        "lovejs",
+        "graphql",
+        "lovejs plugin"
+    ],
+    "scripts": {
+        "build": "yarn compile && yarn copyfiles",
+        "compile": "tsc",
+        "watch": "tsc --watch",
+        "copyfiles": "node ../../scripts/copy-files.js",
+        "test": "jest",
+        "testing": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lovejs/lovejs-graphql.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lovejs/lovejs-graphql/issues"
+    },
+    "dependencies": {
+        "apollo-codegen": "^0.20.2",
+        "apollo-server-koa": "^1.4.0",
+        "apollo-upload-server": "^6.0.0-alpha.1",
+        "graphql": "^0.13.2",
+        "graphql-add-middleware": "^0.3.0",
+        "graphql-custom-types": "^1.4.0",
+        "graphql-tools": "^3.0.5",
+        "graphql-type-json": "^0.2.1",
+        "koa-compose": "^4.1.0",
+        "lodash": "^4.17.10"
+    },
+    "peerDependencies": {
+        "@lovejs/components": "^0.0.1",
+        "@lovejs/framework": "^0.0.1"
+    }
+}

@@ -1,0 +1,42 @@
+parameters:
+    http.router.routes.file: !project_dir config/routing.yml
+
+services:
+    http.router:
+        public: true
+        module: "@lovejs/components/routing/Router"
+        arguments:
+            - loader: !service http.routes.loader,
+              matchers: !services { tag: http.route.matcher, indexBy: tag.name }
+
+        calls:
+            - method: loadFile
+              arguments:
+                  - !parameter http.router.routes.file
+
+    http.routes.loader:
+        module: "@lovejs/components/routing/RoutesLoader"
+        arguments:
+            - { loaders: !services { tag: http.route.loader } }
+
+    http.route.loader.default:
+        module: "@lovejs/components/routing/loaders/DefaultLoader"
+        tags: http.route.loader
+        arguments:
+            - !services { tag: http.route.matcher, indexBy: tag.name }
+            - !services { tag: http.middleware, indexBy: tag.name }
+
+    # List of matchers
+    http.router.matcher.method:
+        module: "@lovejs/components/http/matchers/MethodsMatcher"
+        tags: { tag: http.route.matcher, priority: 20, name: methods }
+
+    http.router.matcher.path:
+        module: "@lovejs/components/http/matchers/PathMatcher"
+        tags: { tag: http.route.matcher, priority: 10, name: path }
+
+    http.router.matcher.environment:
+        module: !plugin_dir /Routing/matchers/EnvironmentMatcher
+        tags: { tag: http.route.matcher, priority: 1, name: env }
+        arguments: [!env environment]
+    # Could add more ... host matcher, whatever matcher

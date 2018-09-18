@@ -1,0 +1,11 @@
+services:
+    http.handler:
+        module: !plugin_dir /Http/Handler
+        public: true
+        shared: false
+        arguments:
+            - !service emitter
+            - !service http.context.builder
+            - !service http.router
+            - !service http.middlewares.resolver
+            - !service logger

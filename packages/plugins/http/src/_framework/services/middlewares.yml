@@ -1,0 +1,26 @@
+services:
+    http.middlewares.resolver:
+        public: true
+        module: "@lovejs/components/middlewares/MiddlewaresResolver"
+        arguments: [!services { tag: http.middleware, indexBy: tag.name }]
+
+    http.middleware.controller:
+        module: !plugin_dir /Middlewares/ControllerMiddleware
+        arguments: [!service container]
+        tags: { tag: http.middleware, name: controller }
+
+    http.middleware.static:
+        module: !plugin_dir /Middlewares/StaticMiddleware
+        tags: { tag: http.middleware, name: static }
+
+    http.middleware.timer:
+        module: !plugin_dir /Middlewares/TimerMiddleware
+        tags: { tag: http.middleware, name: timer }
+
+    http.middleware.error_404:
+        module: !plugin_dir /Middlewares/Error404Middleware
+        tags: { tag: http.middleware, name: error_404 }
+
+    http.middleware.favicon:
+        module: !plugin_dir /Middlewares/FaviconMiddleware
+        tags: { tag: http.middleware, name: favicon }

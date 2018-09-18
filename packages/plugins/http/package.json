@@ -1,0 +1,57 @@
+{
+    "name": "@lovejs/http",
+    "author": "Vincent <vincent@fullstack.pro>",
+    "version": "0.0.1",
+    "description": "Lovejs http",
+    "license": "MIT",
+    "homepage": "http://lovejs.io/",
+    "main": "dist/index.js",
+    "keywords": [
+        "lovejs",
+        "http",
+        "lovejs plugin"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lovejs/lovejs-http.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lovejs/lovejs-http/issues"
+    },
+    "scripts": {
+        "build": "yarn compile && yarn copyfiles",
+        "compile": "tsc",
+        "watch": "tsc --watch",
+        "copyfiles": "node ../../../scripts/copy-files.js",
+        "test": "jest",
+        "testing": "jest --watch"
+    },
+    "peerDependencies": {
+        "@lovejs/components": "^0.0.2",
+        "@lovejs/framework": "^0.0.2"
+    },
+    "dependencies": {
+        "json-error": "^1.1.1",
+        "koa-is-json": "^1.0.0",
+        "koa-send": "^5.0.0",
+        "send": "^0.16.2",
+        "server-destroy": "^1.0.1",
+        "shortid": "^2.2.12",
+        "uws": "^99.0.0"
+    },
+    "devDependencies": {
+        "@lovejs/components": "^0.0.2",
+        "@lovejs/framework": "^0.0.2",
+        "@types/ajv": "^1.0.0",
+        "@types/globby": "^8.0.0",
+        "@types/jest": "^23.3.1",
+        "@types/js-yaml": "^3.11.2",
+        "@types/lodash": "^4.14.116",
+        "@types/node": "^10.7.1",
+        "cpx": "^1.5.0",
+        "jest": "^23.5.0",
+        "mock-fs": "^4.6.0",
+        "ts-jest": "^23.1.4",
+        "typescript": "^3.0.1"
+    }
+}

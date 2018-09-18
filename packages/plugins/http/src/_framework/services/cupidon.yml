@@ -1,0 +1,9 @@
+services:
+    cupidon.extension.http:
+        module: !plugin_dir /Cupidon/CupidonHttp
+        public: true
+        arguments: [!parameter http.cupidon.config, !service container, !project_dir ""]
+        tags:
+            - { tag: cupidon.extension, name: http, priority: 10 }
+            - { tag: love.listener, event: "http.context.start", method: "handleContextStart" }
+            - { tag: love.listener, event: "http.context.finish", method: "handleContextEnd" }

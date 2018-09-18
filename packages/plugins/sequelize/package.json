@@ -1,0 +1,37 @@
+{
+    "name": "@lovejs/sequelize",
+    "author": "Vincent <vincent@fullstack.pro>",
+    "version": "0.0.1",
+    "description": "Lovejs sequelize",
+    "license": "MIT",
+    "homepage": "http://lovejs.io/",
+    "main": "src/index.js",
+    "keywords": [
+        "lovejs",
+        "sequelize",
+        "lovejs plugin"
+    ],
+    "scripts": {
+        "build": "yarn compile && yarn copyfiles",
+        "compile": "tsc",
+        "watch": "tsc --watch",
+        "copyfiles": "node ../../../scripts/copy-files.js",
+        "test": "jest",
+        "testing": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lovejs/lovejs-sequelize.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lovejs/lovejs-sequelize/issues"
+    },
+    "dependencies": {
+        "base-64": "^0.1.0",
+        "sequelize": "^5.0.0-beta.6"
+    },
+    "peerDependencies": {
+        "@lovejs/components": "^0.0.1",
+        "@lovejs/framework": "^0.0.1"
+    }
+}
