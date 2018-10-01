@@ -1,15 +1,22 @@
 services:
     cli:
-        module: !framework_dir /Cli/Cli
+        module: "@lovejs/components/command/Cli"
         public: true
-        arguments: [!parameter kernel.version, !services { tag: love.command }]
+        arguments:
+            - !services { tag: love.commands }
+            - !services { tag: love.command }
+            - !parameter kernel.version
+            - >
+                "\n .-.-.  .-.-.  .-.-.  .-.-.  .-.-.  .-.-." +
+                "\n( L .' ( o .' ( v .' ( e .' ( J .' ( S .'" +
+                "\n `.(    `.(    `.(    `.(    `.(    `.(  "
 
     command.container:
         module: !framework_dir /_framework/commands/Container
         arguments: [!service container, !env project_dir]
-        tags: love.command
+        tags: love.commands
 
     command.plugins:
         module: !framework_dir /_framework/commands/Plugins
-        tags: love.command
+        tags: love.commands
         arguments: [!service kernel]

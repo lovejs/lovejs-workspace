@@ -1,12 +1,16 @@
 import * as _ from "lodash";
-import { Command, Container } from "@lovejs/components";
+import { Command, CommandsProvider } from "@lovejs/components/command";
+import { Container } from "@lovejs/components/dependency_injection";
 
-export class DebugRouter extends Command {
+export class DebugRouter implements CommandsProvider {
     protected container: Container;
 
     constructor(container) {
-        super();
         this.container = container;
+    }
+
+    getCommands() {
+        return new Command("http:router:routes", this.execute.bind(this), "Return the list of routes from the router");
     }
 
     getOutputStyles() {
@@ -20,14 +24,7 @@ export class DebugRouter extends Command {
         };
     }
 
-    register(program) {
-        program
-            .command("http:router:routes")
-            .description("Return the list of routes from the router")
-            .action(this.execute.bind(this));
-    }
-
-    async execute() {
+    async execute(input, output) {
         const router = await this.container.get("router");
         let routes = router.getRoutes();
 
@@ -48,6 +45,6 @@ export class DebugRouter extends Command {
             }
         }
 
-        this.output.table(rows);
+        output.table(rows);
     }
 }

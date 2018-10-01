@@ -1,0 +1,1 @@
+# Love Js - Cupidon plugin

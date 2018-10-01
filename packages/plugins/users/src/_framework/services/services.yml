@@ -1,8 +1,8 @@
 services:
     users.manager:
-        module:   !plugin_dir /UserManager
-        public:   true
-        args:
+        module: !plugin_dir /UserManager
+        public: true
+        arguments:
             - !service repository.user
             - !service { name: !parameter users.manager.password.encoder }
             - !service users.token.provider
@@ -12,46 +12,45 @@ services:
             - !parameter managers.user.options
 
     models-definitions.user:
-        module:     !plugin_dir /model/user
-        args:
+        module: !plugin_dir /model/user
+        arguments:
             - !service sequelize
             - !parameter users.model.configuration
         tags:
-            -
-                tag:      sequelize.model.definition
-                database: !parameter users.model.database
-                model:    user
-                service:  model.user
+            - tag: sequelize.model.definition
+              database: !parameter users.model.database
+              model: user
+              service: model.user
 
     repository.user:
-        module:     !plugin_dir /repository/user
-        public:     true
-        args:
+        module: !plugin_dir /repository/user
+        public: true
+        arguments:
             - !service model.user
             - null
             - !service users.email.normalizer
             - !service users.password.encoder
 
-    users.email.normalizer: 
-        module:     !plugin_dir /others/EmailNormalizer
+    users.email.normalizer:
+        module: !plugin_dir /others/EmailNormalizer
 
     users.password.encoder:
-        alias:      users.password.encoder.bcrypt
+        alias: users.password.encoder.bcrypt
 
     users.password.encoder.bcrypt:
-        module:     !plugin_dir /encoders/PasswordEncoderBcrypt
-        args:       [ !parameter users.password.encoder.bcrypt.salt_rounds ]
+        module: !plugin_dir /encoders/PasswordEncoderBcrypt
+        arguments: [!parameter users.password.encoder.bcrypt.salt_rounds]
 
     users.password.encoder.plain:
-        module:     !plugin_dir /encoders/PasswordEncoderPlain
+        module: !plugin_dir /encoders/PasswordEncoderPlain
 
     users.token.extractor:
-        module:     !plugin_dir /others/TokenExtractor
-        args:       [ !parameter users.token.extractor.options ]
+        module: !plugin_dir /others/TokenExtractor
+        arguments: [!parameter users.token.extractor.options]
 
     users.user.extractor:
-        module:     !plugin_dir /others/UserExtractor
-        args:
-            - !service  repository.user
-            - !service  users.token.provider
-            - !service  users.token.extractor
+        module: !plugin_dir /others/UserExtractor
+        arguments:
+            - !service repository.user
+            - !service users.token.provider
+            - !service users.token.extractor

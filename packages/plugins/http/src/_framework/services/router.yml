@@ -6,7 +6,7 @@ services:
         public: true
         module: "@lovejs/components/routing/Router"
         arguments:
-            - loader: !service http.routes.loader,
+            - loader: !service http.routes.loader
               matchers: !services { tag: http.route.matcher, indexBy: tag.name }
 
         calls:

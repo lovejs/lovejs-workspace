@@ -2,7 +2,7 @@ import { Container, Factory, Service, Tag, _service } from "@lovejs/components/d
 import { Plugin } from "@lovejs/framework";
 
 export default class HttpPlugin extends Plugin {
-    async registerServices(container: Container, origin) {
+    async registerDefinitions(container: Container, origin) {
         await container.loadDefinitions(this.getPluginDir("/_framework/services/services.yml"), origin);
 
         const servers = this.get("servers");
@@ -24,7 +24,7 @@ export default class HttpPlugin extends Plugin {
 
         const koaMiddlewares = this.get("koa_middlewares", {});
         for (let name in koaMiddlewares) {
-            const service = new Service(this.getPluginDir("/Middlewares/KoaMiddlewares"), { public: true });
+            const service = new Service(this.getPluginDir("/Middlewares/KoaMiddleware"), { public: true });
             const serviceName = `http.middleware.${name}`;
             service.setArguments([koaMiddlewares[name]]);
             service.addTag(new Tag("http.middleware", { name }));
@@ -38,7 +38,7 @@ export default class HttpPlugin extends Plugin {
         }
     }
 
-    async boot(container, isCli) {
+    async boot(container: Container, isCli: boolean) {
         if (isCli) {
             return;
         }

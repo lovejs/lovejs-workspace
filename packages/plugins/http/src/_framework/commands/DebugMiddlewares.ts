@@ -1,11 +1,15 @@
-import { Command, Container } from "@lovejs/components";
+import { Command, CommandsProvider } from "@lovejs/components/command";
+import { Container } from "@lovejs/components/dependency_injection";
 
-export default class DebugMiddlewaresCommand extends Command {
+export default class DebugMiddlewaresCommand implements CommandsProvider {
     protected container: Container;
 
     constructor(container) {
-        super();
         this.container = container;
+    }
+
+    getCommands() {
+        return new Command("http:middlewares:list", this.execute.bind(this), "Return list of availables middlewares");
     }
 
     getOutputStyles() {
@@ -18,14 +22,7 @@ export default class DebugMiddlewaresCommand extends Command {
         };
     }
 
-    register(program) {
-        program
-            .command("http:middlewares:list")
-            .description("Return list of availables middlewares")
-            .action(this.execute.bind(this));
-    }
-
-    execute() {
-        this.output.writeln("list");
+    execute(input, output) {
+        output.writeln("list middlewares");
     }
 }

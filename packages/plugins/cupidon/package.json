@@ -1,0 +1,53 @@
+{
+    "name": "@lovejs/cupidon",
+    "author": "Vincent <vincent@fullstack.pro>",
+    "version": "0.0.1",
+    "description": "Lovejs cupidon",
+    "license": "MIT",
+    "homepage": "http://lovejs.io/",
+    "main": "src/index.js",
+    "keywords": [
+        "lovejs",
+        "cupidon",
+        "lovejs plugin"
+    ],
+    "scripts": {
+        "build": "yarn compile && yarn copyfiles",
+        "compile": "tsc",
+        "watch": "tsc --watch",
+        "copyfiles": "node ../../../scripts/copy-files.js",
+        "test": "jest",
+        "testing": "jest --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lovejs/lovejs-cupidon.git"
+    },
+    "bugs": {
+        "url": "https://github.com/lovejs/lovejs-cupidon/issues"
+    },
+    "peerDependencies": {
+        "@lovejs/components": "^0.0.1",
+        "@lovejs/framework": "^0.0.1"
+    },
+    "dependencies": {
+        "@lovejs/cupidon-client": "https://github.com/lovejs/lovejs-cupidon-client",
+        "koa-send": "^5.0.0",
+        "lodash": "^4.17.11",
+        "md5": "^2.2.1",
+        "md5-file": "^4.0.0",
+        "shortid": "^2.2.12",
+        "ws": "^6.0.0"
+    },
+    "devDependencies": {
+        "@lovejs/components": "^0.0.2",
+        "@lovejs/framework": "^0.0.2",
+        "@types/lodash": "^4.14.116",
+        "@types/node": "^10.7.1",
+        "cpx": "^1.5.0",
+        "jest": "^23.5.0",
+        "mock-fs": "^4.6.0",
+        "ts-jest": "^23.1.4",
+        "typescript": "^3.0.1"
+    }
+}

@@ -164,7 +164,7 @@ export class Kernel {
      * Create the container
      * @return {Container}
      */
-    createContainer() {
+    async createContainer() {
         const loader = new ContainerConfigurationLoader(this.getConfigurationLoadersOptions(true));
 
         const parameters = {
@@ -468,38 +468,45 @@ export class Kernel {
      * compile the container and preload services
      */
     async bootContainer() {
-        this.createContainer();
-        await this.registerFrameworkServices();
+        await this.createContainer();
+        await this.registerFrameworkDefinitions();
+        await this.registerPluginsDefinitions();
+        await this.registerApplicationDefinitions();
+        await this.container.compile();
         await this.registerPluginsServices();
         await this.registerApplicationServices();
-
-        for (let p of this.getPlugins()) {
-            const { path, plugin } = p;
-            this.currentPluginPath = path;
-            if (plugin.beforeContainerCompilation && _.isFunction(plugin.beforeContainerCompilation)) {
-                await plugin.beforeContainerCompilation(this.container);
-            }
-        }
-
-        await this.container.compile();
-
-        for (let p of this.getPlugins()) {
-            const { path, plugin } = p;
-            this.currentPluginPath = path;
-            if (plugin.afterContainerCompilation && _.isFunction(plugin.afterContainerCompilation)) {
-                await plugin.afterContainerCompilation(this.container);
-            }
-        }
-
         await this.container.preload();
     }
 
     /**
      * Register the framework services into the container
      */
-    async registerFrameworkServices() {
+    async registerFrameworkDefinitions() {
         if (this.isCli) {
             await this.container.loadDefinitions(path.join(this.getFrameworkDir(), "services/commands.yml"), "framework");
+        }
+    }
+
+    /**
+     * Register the plugins definitions into the container
+     */
+    async registerPluginsDefinitions() {
+        for (let p of this.getPlugins()) {
+            const { name, plugin, path } = p;
+            this.currentPluginPath = path;
+            if (plugin.registerDefinitions) {
+                if (!_.isFunction(plugin.registerDefinitions)) {
+                    throw new PluginError(
+                        `Error register services, the "registerDefinitions" property on plugin class must be a function`,
+                        name
+                    );
+                }
+                try {
+                    await plugin.registerDefinitions(this.container, name, this.isCli);
+                } catch (error) {
+                    throw new PluginError(`Error registering definitions`, name, error);
+                }
+            }
         }
     }
 
@@ -527,11 +534,17 @@ export class Kernel {
     }
 
     /**
-     * Register the application services into the container
+     * Register the application definitions into the container
      */
-    async registerApplicationServices() {
+    async registerApplicationDefinitions() {
         return await this.container.loadDefinitions(`${this.getProjectDir()}/config/services/services.yml`, "application");
     }
+
+    /**
+     * Register the application services after container compilation
+     * override this function in the app kernel
+     */
+    async registerApplicationServices() {}
 
     /**
      * Boot the plugins
@@ -539,7 +552,9 @@ export class Kernel {
     async bootPlugins() {
         for (let p of this.getPlugins()) {
             const { plugin } = p;
-            await plugin.boot(this.container, this.logger, this.isCli);
+            if (plugin.boot) {
+                await plugin.boot(this.container, this.logger, this.isCli);
+            }
         }
     }
 
@@ -607,7 +622,9 @@ export class Kernel {
     async haltPlugins() {
         for (let p of this.plugins) {
             const { plugin } = p;
-            await plugin.halt(this.container, this.logger, this.isCli);
+            if (plugin.halt) {
+                await plugin.halt(this.container, this.isCli);
+            }
         }
     }
 }

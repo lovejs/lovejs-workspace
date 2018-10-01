@@ -3,45 +3,43 @@ imports:
 
 services:
     graphql.schema.builder:
-        module:     !plugin_dir /SchemaBuilder
-        args:
-            -
-                types:       !services { tag: graphql.type }
-                inputs:      !services { tag: graphql.input }
-                enums:       !services { tag: graphql.enum }
-                unions:      !services { tag: graphql.union }
-                queries:     !services { tag: graphql.query }
-                mutations:   !services { tag: graphql.mutation }
-                interfaces:  !services { tag: graphql.interfaces }
-                scalars:     !services { tag: graphql.scalar, indexBy: tag.name }
+        module: !plugin_dir /SchemaBuilder
+        arguments:
+            - types: !services { tag: graphql.type }
+              inputs: !services { tag: graphql.input }
+              enums: !services { tag: graphql.enum }
+              unions: !services { tag: graphql.union }
+              queries: !services { tag: graphql.query }
+              mutations: !services { tag: graphql.mutation }
+              interfaces: !services { tag: graphql.interfaces }
+              scalars: !services { tag: graphql.scalar, indexBy: tag.name }
             - !services { tag: graphql.extension }
             - !services { tag: graphql.middleware, indexBy: tag.name }
 
     graphql.graphql_middleware.validation:
-        module:     !plugin_dir /graphql-middlewares/ValidationMiddleware
-        tags:       { tag: graphql.middleware, name: validation }
-
+        module: !plugin_dir /graphql-middlewares/ValidationMiddleware
+        tags: { tag: graphql.middleware, name: validation }
 
     middleware.graphql:
-        module:     !plugin_dir /routing/middlewares/GraphqlMiddleware
-        tags:       { tag: http.middleware, name: graphql }
-        args:
-            - !service  graphql.schema.builder
+        module: !plugin_dir /routing/middlewares/GraphqlMiddleware
+        tags: { tag: http.middleware, name: graphql }
+        arguments:
+            - !service graphql.schema.builder
             - !services { tag: graphql.context }
-            - !service  { name: !parameter graphql.logger.service }
+            - !service { name: !parameter graphql.logger.service }
 
     middleware.upload:
-        module:     !plugin_dir /routing/middlewares/GraphqlUploadMiddleware
-        tags:       { tag: http.middleware, name: graphql_upload }
-        args:
+        module: !plugin_dir /routing/middlewares/GraphqlUploadMiddleware
+        tags: { tag: http.middleware, name: graphql_upload }
+        arguments:
             - !parameter graphql.upload.options
 
     middleware.graphiql:
-        module:     !plugin_dir /routing/middlewares/GraphiqlMiddleware
-        tags:       { tag: http.middleware, name: graphiql }
+        module: !plugin_dir /routing/middlewares/GraphiqlMiddleware
+        tags: { tag: http.middleware, name: graphiql }
 
     graphql.command.schema:
-        module:     !plugin_dir /_framework/commands/Schema
-        args:       [ !service graphql.schema.builder ]
-        public:     true
-        tags:       love.command
+        module: !plugin_dir /_framework/commands/Schema
+        arguments: [!service graphql.schema.builder]
+        public: true
+        tags: love.command

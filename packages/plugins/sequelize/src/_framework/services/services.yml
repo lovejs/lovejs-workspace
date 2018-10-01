@@ -1,31 +1,17 @@
 services:
     sequelize:
-        module:     sequelize
-        creation:   module
+        module: sequelize
+        creation: module
 
     sequelize.registry:
-        module:    !plugin_dir /sequelize/registry
-        public:    true
-        args:
-            - !service   sequelize
+        module: !plugin_dir /sequelize/Registry
+        public: true
+        arguments:
+            - !service sequelize
             - !parameter sequelize.databases
-            - !service   { name: !parameter sequelize.logger }
-
-    sequelize.command.models:
-        module:   !plugin_dir /_framework/commands/Models
-        tags:     love.command
-        public:   true
-        args:       
-            - !service sequelize.registry
-
-    sequelize.command.database:
-        module:   !plugin_dir /_framework/commands/Database
-        tags:     love.command
-        public:   true
-        args: 
-            - !service sequelize.registry
+            - !service { name: !parameter sequelize.logger }
 
     sequelize.extension.pagination:
-        module:   !plugin_dir /extensions/pagination
+        module: !plugin_dir /extensions/pagination
         creation: module
-        public:   true
+        public: true

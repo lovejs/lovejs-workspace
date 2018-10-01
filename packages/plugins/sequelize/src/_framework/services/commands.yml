@@ -1,0 +1,14 @@
+services:
+    sequelize.command.models:
+        module: !plugin_dir /_framework/commands/Models
+        tags: love.commands
+        public: true
+        arguments:
+            - !service sequelize.registry
+
+    sequelize.command.database:
+        module: !plugin_dir /_framework/commands/Database
+        tags: love.commands
+        public: true
+        arguments:
+            - !service sequelize.registry

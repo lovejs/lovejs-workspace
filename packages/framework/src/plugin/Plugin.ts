@@ -75,12 +75,22 @@ export abstract class Plugin {
     }
 
     /**
+     * Register the plugin services definitions
+     */
+    async registerDefinitions?(Container: Container, isCli: boolean);
+
+    /**
+     * Register or update services (after all definition have been loaded)
+     */
+    async registerServices?(Container: Container, isCli: boolean);
+
+    /**
      * If defined this method is called when the kernel boot
      * use this method when the plugin need to initialize stuff at startup
      * @param container The container
      * @param isCli true if in cli mode
      */
-    async boot(container: Container, isCli: boolean) {}
+    async boot?(container: Container, isCli: boolean);
 
     /**
      * If defined, this method is called when the kernel halt
@@ -88,5 +98,5 @@ export abstract class Plugin {
      * @param container The container
      * @param isCli true if in cli mode
      */
-    async halt(container: Container, isCli: boolean) {}
+    async halt?(container: Container, isCli: boolean);
 }

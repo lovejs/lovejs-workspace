@@ -4,9 +4,15 @@ import * as shortid from "shortid";
 import * as jsonError from "json-error";
 const { errorToJSON } = jsonError;
 
-const CupidonExtension = require("@lovejs/cupidon/src/Cupidon/CupidonExtension");
+import { CupidonExtension } from "@lovejs/cupidon";
 
 export class CupidonHttp extends CupidonExtension {
+    protected config;
+    protected contexts;
+    protected backlogSize;
+    protected container;
+    protected projectDir;
+
     constructor(config, container, projectDir) {
         super();
         this.config = config;

@@ -1,8 +1,12 @@
-import { Command } from "@lovejs/components";
-import { Kernel } from "../../kernel";
 import * as _ from "lodash";
 
-export class PluginsCommand extends Command {
+import { Command, CommandInput, CommandOutput, CommandsProvider } from "@lovejs/components";
+import { Kernel } from "../../kernel";
+
+/**
+ * Commands to get info about loaded plugins
+ */
+export class PluginsCommand implements CommandsProvider {
     /**
      * The application kernel
      */
@@ -14,9 +18,15 @@ export class PluginsCommand extends Command {
     protected prefix: string;
 
     constructor(kernel) {
-        super();
         this.kernel = kernel;
         this.prefix = "plugins";
+    }
+
+    /**
+     * @inheritdoc
+     */
+    getCommands() {
+        return new Command(`${this.prefix}:list`, this.list.bind(this), `List installed plugin`);
     }
 
     getOutputStyles() {
@@ -27,22 +37,7 @@ export class PluginsCommand extends Command {
         };
     }
 
-    register(program) {
-        program
-            .command(`${this.prefix}:list`, `List installed plugin`)
-            .option("-d, --database [db]", "Use following database (default: 'default')")
-            .option("-a, --alter", "Try to synchronize database with alter statements instead of DROP / CREATE", false)
-            .option("-f, --force", "Force database synchronisation (DROP TABLE)", false)
-            .option("-m, --model", "Synchronise only specified model", false)
-            .action(this.list.bind(this));
-
-        program
-            .command(`${this.prefix}:info`, `Get information about a specific plugin`)
-            .argument("<plugin>", "Plugin to get info from")
-            .action(this.info.bind(this));
-    }
-
-    async list() {
+    async list(input: CommandInput, output: CommandOutput) {
         const plugins = this.kernel.getPlugins();
 
         const rows = [];
@@ -51,8 +46,6 @@ export class PluginsCommand extends Command {
             rows.push([`[plugin]${name}[/plugin]`]);
         });
 
-        this.output.table(rows);
+        output.table(rows);
     }
-
-    async info() {}
 }

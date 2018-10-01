@@ -1,0 +1,24 @@
+services:
+    cupidon:
+        module: !plugin_dir Cupidon/Cupidon
+        public: true
+        arguments:
+            - !project_dir var/cupidon
+        calls:
+            - method: registerExtensions
+              arguments: [!services { tag: cupidon.extension, indexBy: tag.name }]
+
+    middleware.cupidon:
+        module: !plugin_dir /Cupidon/CupidonMiddleware
+        arguments: [!service cupidon]
+        tags: { tag: http.middleware, name: cupidon }
+
+    cupidon.extension.love:
+        module: !plugin_dir /Cupidon/Extensions/CupidonLove
+        arguments: [!service container, !service kernel, !project_dir ""]
+        tags: { tag: cupidon.extension, name: love, priority: 1 }
+
+    cupidon.commands:
+        module: !plugin_dir /_framework/commands/CupidonCommands
+        arguments: [!service cupidon]
+        tags: love.commands

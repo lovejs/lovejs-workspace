@@ -1,11 +1,13 @@
-import { Command, Container } from "@lovejs/components";
 import * as _ from "lodash";
 import * as path from "path";
 
+import { Command, CommandInput, CommandOutput, CommandsProvider } from "@lovejs/components/command";
+import { Container } from "@lovejs/components/dependency_injection";
+
 /**
- * Display the list of services & parameters in the container
+ * Command to display the list of services & parameters in the container
  */
-export class DebugContainerCommand extends Command {
+export class DebugContainerCommand implements CommandsProvider {
     /**
      * Services container
      */
@@ -17,9 +19,23 @@ export class DebugContainerCommand extends Command {
     protected projectDir: string;
 
     constructor(container, projectDir) {
-        super();
         this.container = container;
         this.projectDir = projectDir;
+    }
+
+    getCommands() {
+        const serviceExecute = new Command(
+            "container:service:execute",
+            this.executeServiceExecute.bind(this),
+            "Execute a service form the container"
+        );
+        serviceExecute.argument("<service>", "Service to call");
+        serviceExecute.argument("[method]", "Service method to call");
+
+        return [
+            new Command("container:services:list", this.executeServicesList.bind(this), "Return list of services from the container"),
+            serviceExecute
+        ];
     }
 
     getOutputStyles() {
@@ -32,21 +48,7 @@ export class DebugContainerCommand extends Command {
         };
     }
 
-    register(program) {
-        program
-            .command("container:services:list")
-            .description("Return list of services from the container")
-            .action(this.executeServicesList.bind(this));
-
-        program
-            .command("container:service:execute")
-            .description("Execute a service form the container")
-            .argument("<service>", "Service to call")
-            .argument("[method]", "Service method to call")
-            .action(this.executeServiceExecute.bind(this));
-    }
-
-    async executeServicesList() {
+    async executeServicesList(input: CommandInput, output: CommandOutput) {
         let services = this.container.getServices();
         services = _(services)
             .toPairs()
@@ -84,12 +86,12 @@ export class DebugContainerCommand extends Command {
             rows.push([`[serviceId]${id}[/serviceId]`, `[label]${type}[/label]`, from]);
         });
 
-        this.output.table(rows);
+        output.table(rows);
     }
 
-    async executeServiceExecute({ service, method }) {
+    async executeServiceExecute({ args: { service, method } }, { output }) {
         const instance = await this.container.get(service);
         const res = method ? await instance[method].apply(instance) : instance();
-        this.output.writeln(res);
+        output.writeln(res);
     }
 }

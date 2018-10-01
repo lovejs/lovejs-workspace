@@ -7,10 +7,28 @@ const progress = require("cli-progress");
 
 type Transformer = (input: string) => string;
 
+/**
+ * Command output to enhance output in console with colors, emojis and more
+ */
 export class Output {
+    /**
+     * Is the output silenced (don't output)
+     */
     protected silent: boolean;
+
+    /**
+     * A table theme to use with "table" package
+     */
     protected tableTheme: string;
+
+    /**
+     * A map of styles
+     */
     protected styles: object;
+
+    /**
+     * A list of transformer
+     */
     protected transformers: Transformer[];
 
     constructor({ silent = false, styles = {}, tableTheme = "void", transformers = [] } = {}) {
